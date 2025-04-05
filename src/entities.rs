@@ -1,6 +1,8 @@
 
 use std::vec;
 use crate::randomidgenerator::id;
+
+
 #[derive(Debug)]
 pub enum enemies
 {
@@ -11,11 +13,7 @@ pub enum enemies
         isalive:bool,
         id:id
     },
-    player{
-        name:String,
-        health:i32,
-        isalive:bool,
-    },
+    
     
     
 }
@@ -38,10 +36,26 @@ impl enemies
                 return  goblin;
                 
             }
+
+            zombie =>{ 
+               
+                let zombie = enemies::enemy { name: (enemyname ), health: (100), isalive: (true), id: (ID) };
+                
+               
+                return  zombie;
+                
+            }
+
             
         }
         
     }
 
+    fn TakeDamage(&self,damage:i32) {
+            let enemies::enemy { mut health,..} = self;
+            {
+                health -= damage;
+            }
+    }
     
 }
