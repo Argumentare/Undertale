@@ -11,7 +11,7 @@ use crate::UI;
 /*##############
 ////////PLAYER
 */
-const MAXHEALTHP:i32 = 100;
+const MAXHEALTHP:i32 = 9;
 static mut HEALTH:i32 = 0;
 pub static mut ATTACKDAMAGE:i32 =20;
 pub static mut CANATTACK:bool = false;
@@ -67,6 +67,14 @@ pub fn currentlvl()
 
 }
 
+pub fn take_damage(damage:i32)
+    {
+        unsafe {
+            HEALTH -= damage;
+        }
+        
+    }
+
 pub fn addenemytovec(enemy:enemies)
 {
     unsafe{  VEC.push(enemy);}
@@ -82,7 +90,7 @@ impl undertale
         loop 
         {
             let mut incombat:bool = true;
-            
+             
             let mut input:String = String::new();
             
             if DEBUGING && !incombat
@@ -102,31 +110,27 @@ impl undertale
             if incombat && unsafe{!CANATTACK}
             {
             
+            println!("{}{}","PLAYER HEALTHBAR".bold().red(),UI::HEALTHBAR[unsafe{HEALTH as usize}].red());
             actions::incombat();
-            println!("{}",(UI::attack.to_owned() + UI::run).bright_purple());
-
+            println!("{}",(UI::ATTACK.to_owned() + UI::RUN).bright_purple(), );
+            
         io::stdin().read_line(&mut input).expect("wrong input");
         let input:Actions = Actions::action_from_string(input);
         
         Actions::takeaction(input);
         
-        }else if unsafe{CANATTACK} {
+        }else if unsafe{CANATTACK } {
             
             io::stdin().read_line(&mut input).expect("wrong input");
             let input:usize = input.trim().parse().expect("not a number");
             actions::attackF(input);
-            println!("{:?}", unsafe{&VEC});
+            take_damage(enemies::calc_player_dmg());
+         
         }
             
         }
     }
 
 
-    pub fn TakeDamage(damage:i32)
-    {
-        unsafe {
-            HEALTH -= damage;
-        }
-        
-    }
+    
 }

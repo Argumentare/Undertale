@@ -1,6 +1,6 @@
 
 use std::vec;
-use crate::randomidgenerator::id;
+use crate::{game};
 
 
 #[derive(Debug)]
@@ -11,7 +11,8 @@ pub enum enemies
         name:String,
         health:i32,
         isalive:bool,
-        id:id
+        attackdamage:i32,
+        tag:String
     },
     
     
@@ -24,13 +25,13 @@ impl enemies
     pub fn spawnenemy(enemyname:String) -> enemies
     {
         
-        let ID:id = id::randomid();
+        
         match &enemyname
         { 
             
             goblin =>{ 
                
-                let goblin = enemies::enemy { name: (enemyname ), health: (100), isalive: (true), id: (ID) };
+                let goblin = enemies::enemy { name: (enemyname ), health: (100), isalive: (true), tag:("golbin".to_string()),attackdamage: (1) };
                 
                
                 return  goblin;
@@ -39,7 +40,7 @@ impl enemies
 
             zombie =>{ 
                
-                let zombie = enemies::enemy { name: (enemyname ), health: (100), isalive: (true), id: (ID) };
+                let zombie = enemies::enemy { name: (enemyname ), health: (100), isalive: (true), tag: ("zombie".to_string()),attackdamage: (1) };
                 
                
                 return  zombie;
@@ -51,11 +52,19 @@ impl enemies
         
     }
 
-    fn TakeDamage(&self,damage:i32) {
-            let enemies::enemy { mut health,..} = self;
+    pub fn calc_player_dmg() -> i32
+    {
+        let mut totaldamage = 0;
+        unsafe{
+        for x in 0..game::VEC.len()
+        {
+            let enemies::enemy { attackdamage, .. } = game::VEC[x];
             {
-                health -= damage;
+                totaldamage += attackdamage;
             }
+        }    
+        }
+        return  totaldamage;
     }
     
 }

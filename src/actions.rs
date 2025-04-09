@@ -1,3 +1,4 @@
+use core::panic;
 use std::io;
 use crate::entities::enemies;
 use crate::game;
@@ -29,7 +30,7 @@ impl ActionFrstr for Actions
 {
     fn action_from_string(string:String) -> Actions {
         
-        println!("{string}");
+        
         match string.as_str().trim()
         {
             
@@ -67,11 +68,17 @@ pub fn runf()
 }
 pub fn attackF(enemi:usize)
 {
-    unsafe{if let Some(enemies::enemy{ mut health ,..}) = game::VEC.get_mut(enemi)
+
+    unsafe{
+    if enemi > game::VEC.len()
     {
-        health -= 1;
-        
-        println!("{:?}",VEC);
+        panic!("not an enemy");
+    }
+    if let Some(enemies::enemy{health ,..}) = game::VEC.get_mut(enemi)
+    {
+       let mut healt = health;
+        *healt -= game::ATTACKDAMAGE;
+        game::CANATTACK = false;
     }
     }
 }
@@ -82,7 +89,7 @@ pub fn incombat()
     {
         for x in 0..game::VEC.len()
         {
-            let enemies::enemy { name,health, id,.. } = &game::VEC[x];
+            let enemies::enemy { name,health,.. } = &game::VEC[x];
             {
                 println!("{x}.{name} {health}");
             }

@@ -5,9 +5,9 @@ use crate::game::undertale;
 mod floor;
 mod game;
 mod entities;
-mod randomidgenerator; 
 mod actions;
 mod UI;
+mod spells;
 
 
 fn main() {
