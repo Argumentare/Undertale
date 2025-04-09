@@ -8,12 +8,10 @@ mod entities;
 mod actions;
 mod UI;
 mod spells;
-
+mod loot;
 
 fn main() {
     
     game::currentlvl();
-    undertale::run();
-    
-    
+    undertale::run(); 
 }

@@ -3,14 +3,12 @@ use std::alloc::GlobalAlloc;
 
 use crate::entities::enemies;
 static mut CURRENTLVL:usize = 0; 
-static mut ALLFLORS:[floors;2] = [
+pub static mut ALLFLORS:[floors;2] = [
 
 
-floors::normalflors{number:(1),loot:(true),enemies:["goblin", "zombie"]},
+floors::normalflors{number:(1),loot:(true),enemiesf:["goblin", "zombie"]},
 
-
-
-floors::normalflors{number:(2),loot:(true),enemies:["goblin", "zombie"]}]; 
+floors::normalflors{number:(2),loot:(true),enemiesf:["goblin", "zombie"]}]; 
 
 
 #[derive(Debug)]
@@ -21,7 +19,7 @@ pub enum floors
     {
         number:i32,
         loot:bool,
-        enemies:[&'static str;2],
+        enemiesf:[&'static str;2],
     }
 } 
 

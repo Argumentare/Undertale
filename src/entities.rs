@@ -1,6 +1,6 @@
 
 use std::vec;
-use crate::{game};
+use crate::{floor::{self, ALLFLORS}, game};
 
 
 #[derive(Debug)]
@@ -26,19 +26,19 @@ impl enemies
     {
         
         
-        match &enemyname
+        match enemyname.as_str()
         { 
             
-            goblin =>{ 
+            "goblin" =>{ 
                
-                let goblin = enemies::enemy { name: (enemyname ), health: (100), isalive: (true), tag:("golbin".to_string()),attackdamage: (1) };
+                let goblin = enemies::enemy { name: (enemyname ), health: (100), isalive: (true), tag:("goblin".to_string()),attackdamage: (1) };
                 
                
                 return  goblin;
                 
             }
 
-            zombie =>{ 
+            "zombie" =>{ 
                
                 let zombie = enemies::enemy { name: (enemyname ), health: (100), isalive: (true), tag: ("zombie".to_string()),attackdamage: (1) };
                 
@@ -46,7 +46,7 @@ impl enemies
                 return  zombie;
                 
             }
-
+            &_ => panic!("not an enemy"),
             
         }
         
@@ -58,13 +58,35 @@ impl enemies
         unsafe{
         for x in 0..game::VEC.len()
         {
-            let enemies::enemy { attackdamage, .. } = game::VEC[x];
+            
+            let enemies::enemy { attackdamage,health,.. } = game::VEC[x];
             {
-                totaldamage += attackdamage;
+                if health > 0
+                {
+                    totaldamage += attackdamage;
+                }
             }
         }    
         }
         return  totaldamage;
+    }
+
+
+    pub fn check_for_enemies() -> bool
+    {
+        unsafe{
+        for x in 0..game::VEC.len()
+        {
+            let enemies::enemy {isalive,.. } = game::VEC[x];
+            {
+                if isalive 
+                {
+                    return true;
+                }
+            }
+        }
+        }
+        return  false;
     }
     
 }

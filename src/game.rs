@@ -1,26 +1,28 @@
 use std::fmt::Debug;
 use std::io::{self, Read};
-use crate::entities::{enemies};
-use crate::{actions, floor, main};
+use crate::entities::{self, enemies};
+use crate::{actions, floor, main, spells};
 use crate::actions::{Actions,runf,ActionFrstr};
 use crate::floor::floors;
 use core::str::FromStr;
 use colored::Colorize;
 use crate::UI;
+use crate::spells::spell;
 
 /*##############
 ////////PLAYER
 */
 const MAXHEALTHP:i32 = 9;
 static mut HEALTH:i32 = 0;
-pub static mut ATTACKDAMAGE:i32 =20;
+pub static mut ATTACKDAMAGE:i32 =0;
 pub static mut CANATTACK:bool = false;
+pub static mut OWNED_SPELLS:Vec<spell> = Vec::new();
 /*##############
 ////////PLAYER
 */
 
 pub static  mut VEC:Vec<enemies> = Vec::new();
-const DEBUGING:bool = false;
+pub static mut DEBUGING:bool = false;
 
 
 
@@ -31,11 +33,10 @@ pub enum undertale
     
 }
 
-pub fn callenemy(enemy:[&str;2] )
+pub fn callenemy(enemy:&str )
     { 
-        for x in 0..enemy.len()
-        {
-        match enemy[x] {
+        
+        match enemy {
             "goblin" =>
             {
                 let goblin = enemies::spawnenemy(String::from("goblin"));  
@@ -47,7 +48,7 @@ pub fn callenemy(enemy:[&str;2] )
                 addenemytovec(zombie);    
             }
                 &_ => println!("{}", "not an enmey".to_uppercase().white()),   
-         }
+         
         }  
     }   
 
@@ -56,14 +57,13 @@ pub fn currentlvl()
 {
     let currentlvl = floors::nextlvl();
     
-        match currentlvl
+        let floors::normalflors {enemiesf,.. } = currentlvl;
         {
-            floors::normalflors {enemies:["goblin","zombie"],..} => {
-                callenemy(["goblin","zombie"]);
+            for x in 0..enemiesf.len()
+            {
+                callenemy(enemiesf[x]);
             }
-            &_ => (),
         }
-        
 
 }
 
@@ -86,46 +86,59 @@ impl undertale
     
     pub fn run()
     {
-        unsafe{HEALTH = MAXHEALTHP;}
+        unsafe{
+        spells::starting_spell();
+        HEALTH = MAXHEALTHP;}
+        
         loop 
         {
             let mut incombat:bool = true;
-             
             let mut input:String = String::new();
-            
-            if DEBUGING && !incombat
+            let enemies_alive = enemies::check_for_enemies();
+            if unsafe{DEBUGING} 
             {
                 
                 
                 io::stdin().read_line(&mut input).expect("wrong input");
                 let input:i32 = input.trim().parse().expect("not a number");
                 match  input {
-                1 => println!("{:?}",floors::nextlvl()),
+                1 => println!("{:?}",enemies_alive),
                 2 => incombat = true,
                 3 => currentlvl(),
                 4 => unsafe{println!("{:?}",VEC);}
                 _ => (),
                 }
             }
-            if incombat && unsafe{!CANATTACK}
+
+
+
+            if incombat && unsafe{!CANATTACK && !DEBUGING} && enemies_alive 
             {
-            
-            println!("{}{}","PLAYER HEALTHBAR".bold().red(),UI::HEALTHBAR[unsafe{HEALTH as usize}].red());
+
+            unsafe {
+            println!("{}({HEALTH}){}","PLAYER HEALTHBAR".bold().red(),UI::HEALTHBAR[HEALTH as usize].red());
+            }
             actions::incombat();
-            println!("{}",(UI::ATTACK.to_owned() + UI::RUN).bright_purple(), );
-            
-        io::stdin().read_line(&mut input).expect("wrong input");
-        let input:Actions = Actions::action_from_string(input);
+            println!("{} ",(UI::ATTACK.to_owned() + UI::RUN).bright_magenta() );
+            let enemies_alive = enemies::check_for_enemies();
+            if enemies_alive
+            {
+                io::stdin().read_line(&mut input).expect("wrong input");
+                let input:Actions = Actions::action_from_string(input);
+                Actions::takeaction(input);
+            }
+      
         
-        Actions::takeaction(input);
-        
-        }else if unsafe{CANATTACK } {
+        }else if unsafe{CANATTACK} && enemies_alive {
             
+            println!("{}","Cast on an enemy".bold());
             io::stdin().read_line(&mut input).expect("wrong input");
             let input:usize = input.trim().parse().expect("not a number");
             actions::attackF(input);
             take_damage(enemies::calc_player_dmg());
          
+        }else if !enemies_alive{
+            println!("next floor");
         }
             
         }
