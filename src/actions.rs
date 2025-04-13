@@ -6,6 +6,7 @@ use crate::game;
 use crate::entities;
 use crate::game::ATTACKDAMAGE;
 use crate::game::CANATTACK;
+use crate::game::CANSPELL;
 use crate::game::VEC;
 use std::str::FromStr;
 use crate::undertale;
@@ -23,7 +24,6 @@ pub enum Actions
     Donothing,
     Debug,
 }
-
 pub trait ActionFrstr {
     fn action_from_string(string:String) -> Actions;
 }
@@ -73,27 +73,46 @@ pub fn runf()
 fn choose_a_spell()
 {
     println!("{}","Choose a SPELL".bold());
-
+    
     unsafe{ 
         
         for x in 0..game::OWNED_SPELLS.len()
         {
-            let spells::spell{name,damage,..} = game::OWNED_SPELLS[x];
+            let spells::spell{name,damage,mana,..} = game::OWNED_SPELLS[x];
             {
-                println!("{x}.{}(damage:{})",name,damage);
+                println!("{x}.{}(damage:{},mana:{})",name,damage,mana);
             }
         }   
+        game::CANSPELL = true;
     }
-    let mut input:String = String::new();
-    io::stdin().read_line(&mut input).expect("wrong input");
-    let input:usize = input.trim().to_lowercase().parse().expect("not a spell");
-    let spells::spell{name,damage,..} = unsafe{&game::OWNED_SPELLS[input]};
+    
+}
+
+pub fn check_for_mana(input:usize)
+{
+    let enoughmana = spells::check_for_mana(unsafe{&game::OWNED_SPELLS[input]});
+    if enoughmana 
     {
+    let spells::spell{name,damage,mana,..} = unsafe{&game::OWNED_SPELLS[input]};
+    {
+        
         unsafe{
+        {
             game::ATTACKDAMAGE = 0;
-            game::ATTACKDAMAGE += damage;}
+            game::ATTACKDAMAGE += damage;
+            game::MANA -= mana} 
+            game::CANSPELL = false;
+            CANATTACK = true;
+        }
+          
     }
-     unsafe{CANATTACK = true}; 
+     
+    }else if !enoughmana{
+        println!("{}","NOT ENOUGH MANA".bold().red());
+        unsafe{game::CANSPELL = false};
+        choose_a_spell();
+    }
+    
 }
 
 pub fn attackF(enemi:usize)
@@ -118,6 +137,7 @@ pub fn attackF(enemi:usize)
             println!("{}","ENEMY DEAD".bold().red())
         }
     }
+    game::CANATTACK = false;
     }
 }
 

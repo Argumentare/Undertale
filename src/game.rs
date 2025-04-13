@@ -14,8 +14,15 @@ use crate::spells::spell;
 */
 const MAXHEALTHP:i32 = 9;
 static mut HEALTH:i32 = 0;
+
+const MAXMANA:i32 = 10;
+pub static mut MANA:i32 = 0; 
+
+pub const COINS:i32 = 0; 
+
 pub static mut ATTACKDAMAGE:i32 =0;
 pub static mut CANATTACK:bool = false;
+pub static mut CANSPELL:bool = false;
 pub static mut OWNED_SPELLS:Vec<spell> = Vec::new();
 /*##############
 ////////PLAYER
@@ -88,13 +95,16 @@ impl undertale
     {
         unsafe{
         spells::starting_spell();
-        HEALTH = MAXHEALTHP;}
+        HEALTH = MAXHEALTHP;
+        MANA = MAXMANA}
         
         loop 
         {
             let mut incombat:bool = true;
             let mut input:String = String::new();
+            let manaui = unsafe{MANA/10};
             let enemies_alive = enemies::check_for_enemies();
+            
             if unsafe{DEBUGING} 
             {
                 
@@ -112,11 +122,12 @@ impl undertale
 
 
 
-            if incombat && unsafe{!CANATTACK && !DEBUGING} && enemies_alive 
+            if incombat && unsafe{!CANATTACK && !DEBUGING && !CANSPELL} && enemies_alive 
             {
 
             unsafe {
             println!("{}({HEALTH}){}","PLAYER HEALTHBAR".bold().red(),UI::HEALTHBAR[HEALTH as usize].red());
+            println!("{}({MANA}){}", "PLAYER MANA".bold().bright_blue(),UI::MANA[manaui as usize].bright_blue());
             }
             actions::incombat();
             println!("{} ",(UI::ATTACK.to_owned() + UI::RUN).bright_magenta() );
@@ -133,12 +144,21 @@ impl undertale
             
             println!("{}","Cast on an enemy".bold());
             io::stdin().read_line(&mut input).expect("wrong input");
-            let input:usize = input.trim().parse().expect("not a number");
+            let input:usize = input.trim().parse().expect("not a number");  
             actions::attackF(input);
             take_damage(enemies::calc_player_dmg());
          
         }else if !enemies_alive{
             println!("next floor");
+        }
+        
+        if unsafe{!CANATTACK && enemies_alive && CANSPELL }
+        {
+            
+            let mut input:String = String::new();
+            io::stdin().read_line(&mut input).expect("wrong input");
+            let input:usize = input.trim().to_lowercase().parse().expect("not a spell");
+            actions::check_for_mana(input);
         }
             
         }
