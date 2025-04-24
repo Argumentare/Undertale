@@ -15,7 +15,7 @@ use crate::spells::spell;
 const MAXHEALTHP:i32 = 9;
 static mut HEALTH:i32 = 0;
 
-const MAXMANA:i32 = 10;
+const MAXMANA:i32 = 20;
 pub static mut MANA:i32 = 0; 
 
 pub const COINS:i32 = 0; 
@@ -149,7 +149,7 @@ impl undertale
             take_damage(enemies::calc_player_dmg());
          
         }else if !enemies_alive{
-            println!("next floor");
+            floors::nextlvl();
         }
         
         if unsafe{!CANATTACK && enemies_alive && CANSPELL }

@@ -1,7 +1,7 @@
 
 use std::alloc::GlobalAlloc;
 
-use crate::entities::enemies;
+use crate::{entities::enemies, loot};
 static mut CURRENTLVL:usize = 0; 
 pub static mut ALLFLORS:[floors;2] = [
 
@@ -38,10 +38,14 @@ impl floors
     {
        unsafe 
        { 
-        let  lvl:usize = CURRENTLVL;
-        
-        CURRENTLVL += 1;
+        let  lvl:usize = CURRENTLVL;   
+        //if CURRENTLVL > 0 {
+            
+       // }
+           println!("{:?}",loot::randomize_loot());
+        CURRENTLVL += 1;        
         &ALLFLORS[lvl]
+        
        }
        
     }
