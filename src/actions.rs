@@ -131,10 +131,13 @@ pub fn attackF(enemi:usize)
        
              let mut healt = health;
               *healt -= game::ATTACKDAMAGE;
+              
+              game::take_damage(enemies::calc_player_dmg());
              game::CANATTACK = false;
+             
             }
         }else {
-            println!("{}","ENEMY DEAD".bold().red())
+            println!("{}","ENEMY DEAD".bold().green())
         }
     }
     game::CANATTACK = false;

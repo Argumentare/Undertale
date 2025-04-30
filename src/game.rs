@@ -1,5 +1,8 @@
-use std::fmt::Debug;
+use core::panic;
+use std::{fmt,fmt::Debug};
+
 use std::io::{self, Read};
+use std::path::Display;
 use crate::entities::{self, enemies};
 use crate::{actions, floor, main, spells};
 use crate::actions::{Actions,runf,ActionFrstr};
@@ -12,26 +15,25 @@ use crate::spells::spell;
 /*##############
 ////////PLAYER
 */
-const MAXHEALTHP:i32 = 9;
-static mut HEALTH:i32 = 0;
+const MAXHEALTHP:i32 = 10;
+pub static mut HEALTH:i32 = 0;
 
 const MAXMANA:i32 = 20;
 pub static mut MANA:i32 = 0; 
-
-pub const COINS:i32 = 0; 
+pub static mut COINS:i32 = 0; 
 
 pub static mut ATTACKDAMAGE:i32 =0;
 pub static mut CANATTACK:bool = false;
 pub static mut CANSPELL:bool = false;
 pub static mut OWNED_SPELLS:Vec<spell> = Vec::new();
+
+pub static mut CANNEXTFLOOR:bool = false;
 /*##############
 ////////PLAYER
 */
 
 pub static  mut VEC:Vec<enemies> = Vec::new();
 pub static mut DEBUGING:bool = false;
-
-
 
 
 pub enum undertale
@@ -63,7 +65,7 @@ pub fn callenemy(enemy:&str )
 pub fn currentlvl()
 {
     let currentlvl = floors::nextlvl();
-    
+        unsafe{VEC = Vec::new();}
         let floors::normalflors {enemiesf,.. } = currentlvl;
         {
             for x in 0..enemiesf.len()
@@ -122,12 +124,19 @@ impl undertale
 
 
 
-            if incombat && unsafe{!CANATTACK && !DEBUGING && !CANSPELL} && enemies_alive 
+            if incombat && unsafe{!CANATTACK && !DEBUGING && !CANSPELL} && enemies_alive
             {
 
             unsafe {
-            println!("{}({HEALTH}){}","PLAYER HEALTHBAR".bold().red(),UI::HEALTHBAR[HEALTH as usize].red());
+                println!("{}({COINS})","COINS".bold().yellow());
+                if HEALTH >0
+                {
+            println!("{}({HEALTH}){}","PLAYER HEALTHBAR".bold().red(),UI::HEALTHBAR[(HEALTH -1) as usize].red());
+                }else {
+                    panic!("You died");
+                }
             println!("{}({MANA}){}", "PLAYER MANA".bold().bright_blue(),UI::MANA[manaui as usize].bright_blue());
+            
             }
             actions::incombat();
             println!("{} ",(UI::ATTACK.to_owned() + UI::RUN).bright_magenta() );
@@ -140,16 +149,22 @@ impl undertale
             }
       
         
-        }else if unsafe{CANATTACK} && enemies_alive {
+        }else if unsafe{CANATTACK && enemies_alive} {
             
             println!("{}","Cast on an enemy".bold());
             io::stdin().read_line(&mut input).expect("wrong input");
             let input:usize = input.trim().parse().expect("not a number");  
             actions::attackF(input);
-            take_damage(enemies::calc_player_dmg());
          
         }else if !enemies_alive{
-            floors::nextlvl();
+            
+           currentlvl();
+           io::stdin().read_line(&mut input).expect("not a option");
+           match input.trim().to_lowercase().as_str(){
+                "quit" => std::process::exit(0),
+                "continue" => unsafe{CANNEXTFLOOR = true},
+                &_ => (),
+           }
         }
         
         if unsafe{!CANATTACK && enemies_alive && CANSPELL }

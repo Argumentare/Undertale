@@ -1,7 +1,9 @@
 
 use std::alloc::GlobalAlloc;
 
-use crate::{entities::enemies, loot};
+use colored::Colorize;
+
+use crate::{entities::enemies, game, loot};
 static mut CURRENTLVL:usize = 0; 
 pub static mut ALLFLORS:[floors;2] = [
 
@@ -23,12 +25,6 @@ pub enum floors
     }
 } 
 
-struct enormalflors
-{
-    number:i32,
-    loot:bool,
-  //  enemies:Vec<String>,
-}
 
 impl floors
 {
@@ -38,12 +34,17 @@ impl floors
     {
        unsafe 
        { 
-        let  lvl:usize = CURRENTLVL;   
-        //if CURRENTLVL > 0 {
+       
+        let  lvl:usize = CURRENTLVL;    
+        
+        if CURRENTLVL > 0 {
+            println!("{}:{} {}","Floor".italic().blue(),CURRENTLVL.to_string().bold().blue(),"cleared, here's your loot".italic().blue());
+            println!("{:?}",loot::randomize_loot());
             
-       // }
-           println!("{:?}",loot::randomize_loot());
-        CURRENTLVL += 1;        
+            println!("
+    CONTINUE or QUIT");
+        }
+        CURRENTLVL += 1;     
         &ALLFLORS[lvl]
         
        }
