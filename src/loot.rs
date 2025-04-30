@@ -58,7 +58,7 @@ impl Add for loot
 
 
 
-pub fn randomize_loot() -> Vec<loot>
+pub fn randomize_loot(lootmultiplier:usize) -> Vec<loot>
 {
     let mut loot:Vec<loot> = Vec::new();   
     let mut spell_c = 0;

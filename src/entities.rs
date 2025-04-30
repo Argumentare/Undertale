@@ -1,6 +1,6 @@
 
 use std::vec;
-use crate::{floor::{self, ALLFLORS}, game};
+use crate::{floor, game};
 
 
 #[derive(Debug)]
@@ -18,7 +18,7 @@ pub enum enemies
     
     
 }
-
+pub const EXISTING_ENEMIES:[&'static str;2] = ["goblin","imp"]; 
 impl enemies
 {
      
@@ -38,14 +38,15 @@ impl enemies
                 
             }
 
-            "zombie" =>{ 
+            "imp" =>{ 
                
-                let zombie = enemies::enemy { name: (enemyname ), health: (100), isalive: (true), tag: ("zombie".to_string()),attackdamage: (1) };
+                let zombie = enemies::enemy { name: (enemyname), health: (10), isalive: (true), tag: ("imp".to_string()),attackdamage: (1) };
                 
                
                 return  zombie;
                 
             }
+            
             &_ => panic!("not an enemy"),
             
         }

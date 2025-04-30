@@ -19,7 +19,7 @@ pub const EXISTING_SPELLS:[spell;2] = [BITE,GHOSTGOSSIP];
 
 pub fn starting_spell()
 {
-       unsafe{ &game::OWNED_SPELLS.push(GHOSTGOSSIP);}
+       unsafe{ &game::OWNED_SPELLS.push(BITE);}
 }
 
 pub fn check_for_mana(spell:&spell) -> bool

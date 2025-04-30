@@ -2,15 +2,10 @@
 use std::alloc::GlobalAlloc;
 
 use colored::Colorize;
+use rand::Rng;
 
-use crate::{entities::enemies, game, loot};
-static mut CURRENTLVL:usize = 0; 
-pub static mut ALLFLORS:[floors;2] = [
-
-
-floors::normalflors{number:(1),loot:(true),enemiesf:["goblin", "zombie"]},
-
-floors::normalflors{number:(2),loot:(true),enemiesf:["goblin", "zombie"]}]; 
+use crate::{entities::{self, enemies}, game, loot};
+static mut CURRENTLVL:i32 = 0; 
 
 
 #[derive(Debug)]
@@ -21,31 +16,46 @@ pub enum floors
     {
         number:i32,
         loot:bool,
-        enemiesf:[&'static str;2],
+        enemiesf:Vec<&'static str>
     }
 } 
 
+pub fn generate_floor(currentlvl:i32) ->floors {  
+    
+    let enemies_number = rand::rng().random_range(2..=3);
+    let mut enemies:Vec<&'static str> = Vec::new();
+    for x in 0..enemies_number
+    {
+        let enemy = entities::EXISTING_ENEMIES[rand::rng().random_range(0..entities::EXISTING_ENEMIES.len())];
+        enemies.push(enemy);
+    }
+    let floor = floors::normalflors { number: (currentlvl), loot: (true), enemiesf: (enemies) };
+    return  floor;
+}
 
 impl floors
 {
     
 
-    pub fn nextlvl()-> &'static floors
+    pub fn nextlvl()-> floors
     {
        unsafe 
        { 
-       
-        let  lvl:usize = CURRENTLVL;    
+        
+        let  lvl:i32 = CURRENTLVL;    
+        let floor = generate_floor(lvl);
         
         if CURRENTLVL > 0 {
             println!("{}:{} {}","Floor".italic().blue(),CURRENTLVL.to_string().bold().blue(),"cleared, here's your loot".italic().blue());
-            println!("{:?}",loot::randomize_loot());
-            
+            let floors::normalflors {enemiesf,..} = &floor;
+            {
+                println!("{:?}",loot::randomize_loot(enemiesf.len()));
+            }
             println!("
     CONTINUE or QUIT");
         }
         CURRENTLVL += 1;     
-        &ALLFLORS[lvl]
+        return  floor;
         
        }
        

@@ -51,11 +51,12 @@ pub fn callenemy(enemy:&str )
                 let goblin = enemies::spawnenemy(String::from("goblin"));  
                 addenemytovec(goblin);    
             }
-            "zombie" => 
-            {
-                let zombie = enemies::spawnenemy(String::from("zombie"));  
-                addenemytovec(zombie);    
+    
+            "imp" => {let imp = enemies::spawnenemy(String::from("imp"));
+            addenemytovec(imp);
             }
+
+
                 &_ => println!("{}", "not an enmey".to_uppercase().white()),   
          
         }  
