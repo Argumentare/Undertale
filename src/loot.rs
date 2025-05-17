@@ -19,7 +19,7 @@ pub enum loot
 impl Distribution<loot> for StandardUniform {
     fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> loot {
         match rng.random_range(0..=3) { 
-            0 => loot::Smallcoins(rng.random_range(1..=5)),
+            0 => loot::Smallcoins(1),
             1 => loot::HealthPotion(1),
             2 => loot::Spell(&spells::EXISTING_SPELLS[rng.random_range(0..spells::EXISTING_SPELLS.len())].name),
             _ => loot::ManaPotion(1),
@@ -103,7 +103,7 @@ pub fn randomize_loot(lootmultiplier:usize) -> Vec<loot>
                 for x in 0..OWNED_SPELLS.len()
                 {
                     
-                    if &OWNED_SPELLS[x].name == &n.to_string().as_str()
+                    if &OWNED_SPELLS[x].name.trim() == &n.to_string().as_str().trim()
                     {
                         break 'outer;
                     }

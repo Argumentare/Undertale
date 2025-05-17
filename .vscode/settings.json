@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        ".fantomasignore": "ignore",
+        "stdio.h": "c"
+    },
+    "cmake.sourceDirectory": "/run/media/argument/Mircu/rust/Undertale/raylib/projects/CMake"
+}
