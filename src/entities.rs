@@ -1,6 +1,6 @@
 
 use std::vec;
-use crate::{floor, game};
+use crate::{floor, game::{self, VEC}};
 
 
 #[derive(Debug)]
@@ -12,12 +12,22 @@ pub enum enemies
         health:i32,
         isalive:bool,
         attackdamage:i32,
-        tag:String
-    },
-    
-    
-    
+        tag:String,
+        pos:f32,
+    },  
 }
+
+
+#[repr(C)]
+
+pub struct enemyinformation{
+    health:i32,
+    name:char,
+    pos:f32,
+}
+
+
+
 pub const EXISTING_ENEMIES:[&'static str;2] = ["goblin","imp"]; 
 impl enemies
 {
@@ -31,7 +41,7 @@ impl enemies
             
             "goblin" =>{ 
                
-                let goblin = enemies::enemy { name: (enemyname ), health: (100), isalive: (true), tag:("goblin".to_string()),attackdamage: (1) };
+                let goblin = enemies::enemy { name: (enemyname ), health: (100), isalive: (true), tag:("goblin".to_string()),attackdamage: (1),pos: 1f32};
                 
                
                 return  goblin;
@@ -40,7 +50,7 @@ impl enemies
 
             "imp" =>{ 
                
-                let zombie = enemies::enemy { name: (enemyname), health: (10), isalive: (true), tag: ("imp".to_string()),attackdamage: (1) };
+                let zombie = enemies::enemy { name: (enemyname), health: (10), isalive: (true), tag: ("imp".to_string()),attackdamage: (1),pos: 1f32};
                 
                
                 return  zombie;
@@ -88,6 +98,32 @@ impl enemies
         }
         }
         return  false;
+    }
+ 
+    #[no_mangle]
+    pub extern "C" fn getenemyinfo(x:i32) -> enemyinformation{
+        
+        unsafe{
+        let enemies::enemy {name,health,pos,..} = &game::VEC[x as usize];{
+            
+            let b = *health;
+            let c = *pos + x as f32;
+            let mut d:char = ' ';
+            match &*name.trim().to_lowercase().as_str(){
+
+                "imp" => d = 'c',
+                "goblin" => d = 'g', 
+                &_ => (),
+            }
+            let enemy:enemyinformation = enemyinformation { health: (b), name: (d), pos: (c) };   
+            return enemy;
+        }}      
+        
+    }
+
+    #[no_mangle]
+    pub extern "C" fn enmiesnumber() -> i32{
+        unsafe{return VEC.len() as i32;}
     }
     
 }

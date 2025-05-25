@@ -36,6 +36,7 @@ pub static  mut VEC:Vec<enemies> = Vec::new();
 pub static mut DEBUGING:bool = false;
 
 
+
 pub enum undertale
 {
     
@@ -87,24 +88,22 @@ pub fn take_damage(damage:i32)
 
 pub fn addenemytovec(enemy:enemies)
 {
-    unsafe{  VEC.push(enemy);}
+    unsafe{  VEC.push( enemy);}
 }
-     extern "C"{
-    fn graphics();
-     }
+
 impl undertale
 {
     
     
-    
-    pub fn gameloop(){
+    #[no_mangle]
+    pub extern "C" fn gameloop(){
         unsafe{
         spells::starting_spell();
         HEALTH = MAXHEALTHP;
         MANA = MAXMANA;
         
         }
-
+            
             let mut incombat:bool = true;
             let mut input:String = String::new();
             let manaui = unsafe{MANA/10};
@@ -144,7 +143,7 @@ impl undertale
             actions::incombat();
             println!("{} ",(UI::ATTACK.to_owned() + UI::RUN).bright_magenta() );
             let enemies_alive = enemies::check_for_enemies();
-            if enemies_alive
+          if enemies_alive
             {
                 io::stdin().read_line(&mut input).expect("wrong input");
                 let input:Actions = Actions::action_from_string(input);
@@ -152,7 +151,7 @@ impl undertale
             }
       
         
-        }else if unsafe{CANATTACK && enemies_alive} {
+         }else if unsafe{CANATTACK && enemies_alive} {
             
             println!("{}","Cast on an enemy".bold());
             io::stdin().read_line(&mut input).expect("wrong input");
@@ -180,7 +179,7 @@ impl undertale
         }
             
         
-    
+        
     }   
 
 
