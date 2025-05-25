@@ -89,20 +89,22 @@ pub fn addenemytovec(enemy:enemies)
 {
     unsafe{  VEC.push(enemy);}
 }
-
+     extern "C"{
+    fn graphics();
+     }
 impl undertale
 {
     
     
-    pub fn run()
-    {
+    
+    pub fn gameloop(){
         unsafe{
         spells::starting_spell();
         HEALTH = MAXHEALTHP;
-        MANA = MAXMANA}
+        MANA = MAXMANA;
         
-        loop 
-        {
+        }
+
             let mut incombat:bool = true;
             let mut input:String = String::new();
             let manaui = unsafe{MANA/10};
@@ -177,8 +179,9 @@ impl undertale
             actions::check_for_mana(input);
         }
             
-        }
-    }
+        
+    
+    }   
 
 
     

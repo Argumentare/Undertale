@@ -1,45 +1,38 @@
 #include "raylib.h"
+#include <stdio.h>
 
-//------------------------------------------------------------------------------------
-// Program main entry point
-//------------------------------------------------------------------------------------
+
 void graphics()
 {
     
+   
     // Initialization
     //--------------------------------------------------------------------------------------
     const int screenWidth = 800;
     const int screenHeight = 450;
 
+    Vector2 ballPosition = { (float)screenWidth/2, (float)screenHeight/2 };
     InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
 
-    SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
+    SetTargetFPS(60);               
     //--------------------------------------------------------------------------------------
 
     // Main game loop
-    while (!WindowShouldClose())    // Detect window close button or ESC key
+    while (!WindowShouldClose())    
     {
-        // Update
-        //----------------------------------------------------------------------------------
-        // TODO: Update your variables here
-        //----------------------------------------------------------------------------------
-
-        // Draw
-        //----------------------------------------------------------------------------------
+        
+        
         BeginDrawing();
 
             ClearBackground(RAYWHITE);
 
             DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
-
+            DrawCircleV(ballPosition, 50, MAROON);
         EndDrawing();
-        //----------------------------------------------------------------------------------
+        
     }
 
-    // De-Initialization
-    //--------------------------------------------------------------------------------------
-    CloseWindow();        // Close window and OpenGL context
-    //--------------------------------------------------------------------------------------
+    CloseWindow();        
     
-    return 0;
+    
 }

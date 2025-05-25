@@ -13,12 +13,14 @@ mod loot;
 
 extern "C"{
     fn graphics();
-}
+     }
+
 fn main() {
     
-    game::currentlvl();
-    undertale::run(); 
+    
+  //  game::currentlvl();
+   // game::undertale::gameloop();
     unsafe{graphics();}
     
-   
+    
 }
