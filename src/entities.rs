@@ -24,6 +24,7 @@ pub struct enemyinformation{
     health:i32,
     name:char,
     pos:f32,
+    isalive:bool,
 }
 
 
@@ -104,18 +105,19 @@ impl enemies
     pub extern "C" fn getenemyinfo(x:i32) -> enemyinformation{
         
         unsafe{
-        let enemies::enemy {name,health,pos,..} = &game::VEC[x as usize];{
+        let enemies::enemy {name,health,pos,isalive,..} = &game::VEC[x as usize];{
             
             let b = *health;
             let c = *pos + x as f32;
             let mut d:char = ' ';
+            let a = *isalive;
             match &*name.trim().to_lowercase().as_str(){
 
                 "imp" => d = 'c',
                 "goblin" => d = 'g', 
                 &_ => (),
             }
-            let enemy:enemyinformation = enemyinformation { health: (b), name: (d), pos: (c) };   
+            let enemy:enemyinformation = enemyinformation { health: (b), name: (d), pos: (c),isalive: (a) };   
             return enemy;
         }}      
         

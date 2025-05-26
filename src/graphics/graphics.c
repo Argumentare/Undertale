@@ -52,8 +52,11 @@ void graphics()
                 
 
                 //Emenmy Sprites
+                if(enemy.isalive ){
                 DrawCircleV(pose, 50, MAROON);    
                 DrawText(TextFormat("%d",enemy.health),pose.x,pose.y,20,BLACK);
+                }
+                //UI Sprites
                 DrawTextureRec(attackbutton.texture, attackbutton.sourceRec, (Vector2){attackbutton.Bounds.x,attackbutton.Bounds.y}, WHITE);
                 DrawTextureRec(runbutton.texture, runbutton.sourceRec, (Vector2){runbutton.Bounds.x,runbutton.Bounds.y}, WHITE);
 

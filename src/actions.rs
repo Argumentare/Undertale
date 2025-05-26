@@ -155,12 +155,9 @@ pub fn incombat()
             
             let enemies::enemy { name,health,isalive,.. } = &mut game::VEC[x];
             {
-                if *health > 0
+                if *health < 0
                 {
-                    println!("{x}.{name} {health}");
-                }else {
-                  
-                    println!("{x}.{name} (dead)");
+                
                     *isalive = false;
                 }
             }

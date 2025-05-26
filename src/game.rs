@@ -126,30 +126,11 @@ impl undertale
 
 
 
-        /*     if incombat && unsafe{!CANATTACK && !DEBUGING && !CANSPELL} && enemies_alive
+            if incombat && unsafe{!CANATTACK && !DEBUGING && !CANSPELL} && enemies_alive
             {
-
-            unsafe {
-                println!("{}({COINS})","COINS".bold().yellow());
-                if HEALTH >0
-                {
-            println!("{}({HEALTH}){}","PLAYER HEALTHBAR".bold().red(),UI::HEALTHBAR[(HEALTH -1) as usize].red());
-                }else {
-                    panic!("You died");
-                }
-            println!("{}({MANA}){}", "PLAYER MANA".bold().bright_blue(),UI::MANA[manaui as usize].bright_blue());
-            
-            }
+           
             actions::incombat();
-            println!("{} ",(UI::ATTACK.to_owned() + UI::RUN).bright_magenta() );
             let enemies_alive = enemies::check_for_enemies();
-          if enemies_alive
-            {
-                io::stdin().read_line(&mut input).expect("wrong input");
-                let input:Actions = Actions::action_from_string(input);
-                Actions::takeaction(input);
-            }
-      
         
          }else if unsafe{CANATTACK && enemies_alive} {
             
@@ -176,7 +157,7 @@ impl undertale
             io::stdin().read_line(&mut input).expect("wrong input");
             let input:usize = input.trim().to_lowercase().parse().expect("not a spell");
             actions::check_for_mana(input);
-        }*/
+        }
             
         
         
