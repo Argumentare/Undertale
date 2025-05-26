@@ -18,27 +18,28 @@ eneinf getenemyinfo(int32_t);
 
 void graphics()
 {
-    const int screenWidth = 800;
-    const int screenHeight = 450;
-   
-    //Button
-    Texture2D button = LoadTexture("resources/button.png");
-    Rectangle btnBounds = {screenWidth/2 - button.width/2,screenHeight/2 - button.height/2, (float)button.width, (float)button.height};
-     Rectangle sourceRec = { 0, 0, (float)button.width,(float)button.height};
-
-
-    
-    
-    Vector2 ballpos = {100,100};
+    const int screenWidth = 1920;
+    const int screenHeight = 1080;
+     
     InitWindow(screenWidth, screenHeight, "Undertale");
-
     SetTargetFPS(60);               
     
-    
+    //Button
+    Texture2D button = LoadTexture("resources/button.jpg");
+    Rectangle btnBounds = {0,800, (float)button.width, (float)button.height};
+    Rectangle sourceRec = { 0, 0, (float)button.width,(float)button.height};
+
     // Main game loop
     while (!WindowShouldClose())    
     {
-        
+        bool btnActionAttack = false;
+        if(CheckCollisionPointRec(GetMousePosition(),btnBounds)){
+             if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) btnActionAttack = true;       
+        }
+
+        if(btnActionAttack){
+            CloseWindow();
+        }
         
         BeginDrawing();
 
@@ -55,11 +56,13 @@ void graphics()
                 //Emenmy Sprites
                 DrawCircleV(pose, 50, MAROON);    
                 DrawText(TextFormat("%d",enemy.health),pose.x,pose.y,20,BLACK);
-                DrawTextureRec(button, sourceRec, (Vector2){400,400}, WHITE);
+                DrawTextureRec(button, sourceRec, (Vector2){btnBounds.x,btnBounds.y}, WHITE);
             }
         EndDrawing();
         gameloop(); 
     }
+
+    UnloadTexture(button); 
 
     CloseWindow();        
     

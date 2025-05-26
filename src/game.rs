@@ -126,7 +126,7 @@ impl undertale
 
 
 
-            if incombat && unsafe{!CANATTACK && !DEBUGING && !CANSPELL} && enemies_alive
+        /*     if incombat && unsafe{!CANATTACK && !DEBUGING && !CANSPELL} && enemies_alive
             {
 
             unsafe {
@@ -176,7 +176,7 @@ impl undertale
             io::stdin().read_line(&mut input).expect("wrong input");
             let input:usize = input.trim().to_lowercase().parse().expect("not a spell");
             actions::check_for_mana(input);
-        }
+        }*/
             
         
         
