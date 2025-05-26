@@ -4,7 +4,7 @@ fn main()
 {
     
     println!("cargo:rustc-link-search=native=lib");
-    println!("cargo:rustc-link-lib=static=cplus");
+    println!("cargo:rustc-link-lib=static=graphics");
     println!("cargo:rustc-link-lib=raylib"); 
     println!("cargo:rustc-link-lib=m");      
     println!("cargo:rustc-link-lib=GL");      

@@ -3,7 +3,8 @@
         ".fantomasignore": "ignore",
         "stdio.h": "c",
         "compare": "c",
-        "cstdint": "c"
+        "cstdint": "c",
+        "raylib.h": "c"
     },
     "cmake.sourceDirectory": "/run/media/argument/Mircu/rust/Undertale/raylib/projects/CMake"
 }

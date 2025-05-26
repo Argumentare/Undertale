@@ -13,7 +13,7 @@ use crate::undertale;
 use crate::spells;
 
 
-
+#[repr(C)]
 #[derive(Debug,PartialEq,Eq)]
 pub enum Actions
 {
@@ -30,6 +30,7 @@ pub trait ActionFrstr {
 
 impl ActionFrstr for Actions
 {
+    
     fn action_from_string(string:String) -> Actions {
         
         
@@ -48,7 +49,8 @@ impl ActionFrstr for Actions
 }
 impl Actions
 {
-    pub fn takeaction(action:Actions)
+    #[no_mangle]
+    pub extern "C" fn takeaction(action:Actions)
     {
         match action
         {
