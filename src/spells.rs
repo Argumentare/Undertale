@@ -1,4 +1,6 @@
-use crate::game;
+use std::ffi::{c_char, CString};
+
+use crate::game::{self, OWNED_SPELLS};
 use rand::prelude::*;
 use rand::distr::{Distribution,StandardUniform};
 #[derive(Debug,PartialEq)]
@@ -30,4 +32,10 @@ pub fn check_for_mana(spell:&spell) -> bool
         }else {
             return true
         }
+}
+
+#[no_mangle]
+pub extern "C" fn get_spell(spell:i32) -> *mut c_char{
+      unsafe{  OWNED_SPELLS[spell as usize].name.as_ptr() as *mut i8
+      }
 }

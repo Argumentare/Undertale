@@ -6,7 +6,7 @@
 
 void gameloop(void);
 int enmiesnumber();
-
+char* get_spell(int32_t spell);
 
 void graphics()
 {
@@ -62,12 +62,17 @@ void graphics()
             }
                 //Player UI Sprites
                     //MainBody
-                    DrawTexture(mainbody.texture,mainbody.position.x,mainbody.position.y,WHITE);    
+                    DrawTexture(mainbody.texture,mainbody.position.x,mainbody.position.y,WHITE);                       
 
                     //Buttons
                     DrawTextureRec(attackbutton.texture, attackbutton.sourceRec, (Vector2){attackbutton.Bounds.x,attackbutton.Bounds.y}, WHITE);
                     DrawTextureRec(runbutton.texture, runbutton.sourceRec, (Vector2){runbutton.Bounds.x,runbutton.Bounds.y}, WHITE);
-                    DrawTextureRec(speells1.texture,speells1.sourceRec, (Vector2){speells1.Bounds.x,speells1.Bounds.y},WHITE);
+                        //MainBodyButtons
+                            //spells    
+                            for(int i = 0; i<= player.spellcount; i++){
+                                DrawTextureRec(speells1.texture, speells1.sourceRec, (Vector2){speells1.Bounds.x,speells1.Bounds.y}, WHITE);
+                                DrawText(TextFormat("%d",get_spell(i)),speells1.Bounds.x,speells1.Bounds.y,50,GREEN);
+                            }
                     //PInfo
                     DrawText(TextFormat("%d",player.HEALTH),1700,30,50,RED);
                     DrawText(TextFormat("%d",player.MANA),1750,30,50,BLUE);

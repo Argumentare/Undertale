@@ -42,7 +42,8 @@ pub struct playerinformation{
     mana:i32,
     health:i32,
     coins:i32,
-    spells:[String;10],
+    CANSPEL:bool,
+    spellcount:i32,
 }
 
 pub enum undertale
@@ -177,14 +178,10 @@ impl undertale
 
    #[no_mangle]
     pub extern "C" fn getplayerinfo() -> playerinformation{
-       let mut spells_name:[String;3] = [" "];
-       unsafe {      
-        for x in 0..OWNED_SPELLS.len(){
-            spells_name.push(OWNED_SPELLS[x].name.to_string());
-       }
 
-
-        playerinformation { mana: (MANA), health: (HEALTH), coins: (COINS), spells:()}
+        unsafe{
+        playerinformation { mana: (MANA), health: (HEALTH), coins: (COINS),
+        CANSPEL:(CANSPELL),spellcount:(OWNED_SPELLS.len() as i32)}
        }
     }   
 

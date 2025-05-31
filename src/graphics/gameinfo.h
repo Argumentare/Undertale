@@ -12,7 +12,9 @@ typedef struct playerinformation{
     int32_t MANA;
     int32_t HEALTH;
     int32_t COINS;
-    char spells[];
+    int32_t spellcount;
+    bool CANSPEL;
+    
     
 }playerinf;
 playerinf getplayerinfo();
