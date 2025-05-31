@@ -74,10 +74,12 @@ pub fn runf()
 
 fn choose_a_spell()
 {
-    println!("{}","Choose a SPELL".bold());
+    
+    
     
     unsafe{ 
-        
+        CANATTACK = true;
+        game::CANSPELL = true;
         for x in 0..game::OWNED_SPELLS.len()
         {
             let spells::spell{name,damage,mana,..} = game::OWNED_SPELLS[x];
@@ -85,8 +87,9 @@ fn choose_a_spell()
                 println!("{x}.{}(damage:{},mana:{})",name,damage,mana);
             }
         }   
-        game::CANSPELL = true;
+        
     }
+    println!("{}","Choose a SPELL".bold());
     
 }
 
@@ -104,7 +107,7 @@ pub fn check_for_mana(input:usize)
             game::ATTACKDAMAGE += damage;
             game::MANA -= mana} 
             game::CANSPELL = false;
-            CANATTACK = true;
+            
         }
           
     }
@@ -135,7 +138,7 @@ pub fn attackF(enemi:usize)
               *healt -= game::ATTACKDAMAGE;
               
               game::take_damage(enemies::calc_player_dmg());
-             game::CANATTACK = false;
+             
              
             }
         }else {

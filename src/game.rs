@@ -18,9 +18,9 @@ use crate::spells::spell;
 const MAXHEALTHP:i32 = 10;
 pub static mut HEALTH:i32 = 0;
 
-const MAXMANA:i32 = 20;
+ const MAXMANA:i32 = 20;
 pub static mut MANA:i32 = 0; 
-pub static mut COINS:i32 = 0; 
+pub static mut COINS:i32 = 2; 
 
 pub static mut ATTACKDAMAGE:i32 =0;
 pub static mut CANATTACK:bool = false;
@@ -37,9 +37,23 @@ pub static mut DEBUGING:bool = false;
 
 
 
+#[repr(C)]
+pub struct playerinformation{
+    mana:i32,
+    health:i32,
+    coins:i32,
+}
+
 pub enum undertale
 {
     
+    
+}
+
+pub fn start(){
+    spells::starting_spell();
+    unsafe{HEALTH = MAXHEALTHP;
+    MANA = MAXMANA;}
     
 }
 
@@ -98,9 +112,6 @@ impl undertale
     #[no_mangle]
     pub extern "C" fn gameloop(){
         unsafe{
-        spells::starting_spell();
-        HEALTH = MAXHEALTHP;
-        MANA = MAXMANA;
         
         }
             
@@ -132,11 +143,11 @@ impl undertale
             actions::incombat();
             let enemies_alive = enemies::check_for_enemies();
         
-         }else if unsafe{CANATTACK && enemies_alive} {
+         }else if unsafe{CANATTACK && enemies_alive && !CANSPELL} {
             
             println!("{}","Cast on an enemy".bold());
-            io::stdin().read_line(&mut input).expect("wrong input");
-            let input:usize = input.trim().parse().expect("not a number");  
+           io::stdin().read_line(&mut input).expect("wrong input");
+            let input:usize = input.trim().parse().expect("not a number");   
             actions::attackF(input);
          
         }else if !enemies_alive{
@@ -150,7 +161,7 @@ impl undertale
            }
         }
         
-        if unsafe{!CANATTACK && enemies_alive && CANSPELL }
+        if unsafe{CANATTACK && enemies_alive && CANSPELL }
         {
             
             let mut input:String = String::new();
@@ -161,6 +172,13 @@ impl undertale
             
         
         
+    }
+
+   #[no_mangle]
+    pub extern "C" fn getplayerinfo() -> playerinformation{
+       unsafe {      
+        playerinformation { mana: (MANA), health: (HEALTH), coins: (COINS) }
+       }
     }   
 
 

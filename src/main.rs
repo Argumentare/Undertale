@@ -20,13 +20,8 @@ extern "C"{
 fn main() {
     
     
+    game::start();
     game::currentlvl();
-  
-    
     unsafe{graphics();}
-
-    
-    
         
-    
 }

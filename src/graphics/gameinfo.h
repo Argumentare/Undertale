@@ -8,6 +8,14 @@ typedef struct enemyinformation{
 }eneinf;
 eneinf getenemyinfo(int32_t);
 
+typedef struct playerinformation{
+    int32_t MANA;
+    int32_t HEALTH;
+    int32_t COINS;
+    
+}playerinf;
+playerinf getplayerinfo();
+
 typedef enum Actions
 {
     Attack,

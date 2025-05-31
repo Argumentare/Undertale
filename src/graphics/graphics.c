@@ -12,17 +12,18 @@ void graphics()
 {
     const int screenWidth = 1920;
     const int screenHeight = 1080;
-     
     InitWindow(screenWidth, screenHeight, "Undertale");
     SetTargetFPS(60);               
     
     but attackbutton = AttackButton();
     but runbutton = RunButton();
-
+    NMtextures mainbody = MainBody();
+    but speells1 = SpellSlot1();
     // Main game loop
     while (!WindowShouldClose())    
     {
-    
+        playerinf player = getplayerinfo();
+
         if(CheckCollisionPointRec(GetMousePosition(),attackbutton.Bounds)){
              if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) attackbutton.ispressed = true;       
         }
@@ -32,10 +33,12 @@ void graphics()
         }
 
         if(attackbutton.ispressed){
+            attackbutton.ispressed = false;
             takeaction(Attack);
         }
 
         if(runbutton.ispressed){
+            runbutton.ispressed = false;
             takeaction(Run);
         }
         
@@ -49,22 +52,32 @@ void graphics()
 
                 eneinf enemy = getenemyinfo(i);
                 Vector2 pose = {enemy.pos*100,100};
-                
+                float radius = 50;
 
                 //Emenmy Sprites
-                if(enemy.isalive ){
-                DrawCircleV(pose, 50, MAROON);    
+                if(enemy.isalive ){      
+                DrawCircleV(pose, radius, MAROON);    
                 DrawText(TextFormat("%d",enemy.health),pose.x,pose.y,20,BLACK);
                 }
-                //UI Sprites
-                DrawTextureRec(attackbutton.texture, attackbutton.sourceRec, (Vector2){attackbutton.Bounds.x,attackbutton.Bounds.y}, WHITE);
-                DrawTextureRec(runbutton.texture, runbutton.sourceRec, (Vector2){runbutton.Bounds.x,runbutton.Bounds.y}, WHITE);
-
             }
+                //Player UI Sprites
+                    //MainBody
+                    DrawTexture(mainbody.texture,mainbody.position.x,mainbody.position.y,WHITE);    
+
+                    //Buttons
+                    DrawTextureRec(attackbutton.texture, attackbutton.sourceRec, (Vector2){attackbutton.Bounds.x,attackbutton.Bounds.y}, WHITE);
+                    DrawTextureRec(runbutton.texture, runbutton.sourceRec, (Vector2){runbutton.Bounds.x,runbutton.Bounds.y}, WHITE);
+                    DrawTextureRec(speells1.texture,speells1.sourceRec, (Vector2){speells1.Bounds.x,speells1.Bounds.y},WHITE);
+                    //PInfo
+                    DrawText(TextFormat("%d",player.HEALTH),1700,30,50,RED);
+                    DrawText(TextFormat("%d",player.MANA),1750,30,50,BLUE);
+                    DrawText(TextFormat("%d",player.COINS),1820,30,50,YELLOW);
+
+            
         EndDrawing();
         gameloop(); 
     }
-
+    UnloadTexture(mainbody.texture);
     UnloadTexture(attackbutton.texture); 
     UnloadTexture(runbutton.texture);
 
